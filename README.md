@@ -5,7 +5,9 @@
 
 [![NPM](https://nodei.co/npm/npm-local-cache.png?downloads=true)](https://nodei.co/npm/npm-local-cache/)
 
-Creates a local searchable NPM cache. Functionality:
+Creates a local searchable NPM cache. Good for building your own module repo based on NPM.
+
+Functionality:
 
 * Filter on custom keywords (useful for when NPM is used as module repo, like in the case of [mongoosejs](http://mongoosejs.com) and [breach.cc](http://breach.cc)).
 * Customizble search fields.

@@ -1,7 +1,7 @@
 {
   "name": "npm-local-cache",
   "version": "0.0.2",
-  "description": "Creates a local searchable NPM cache. Good for module repo.",
+  "description": "Creates a local searchable NPM cache. Good for building your own module repo based on NPM.",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha -s 2000 -t 30000 -R spec test/*.js"
