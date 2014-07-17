@@ -1,0 +1,35 @@
+{
+  "name": "npm-local-cache",
+  "version": "0.0.1",
+  "description": "Creates a local searchable NPM cache. Good for module repo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha -s 2000 -t 120000 -R spec test/*.js"
+  },
+  "keywords": [
+    "npm",
+    "cache",
+    "module-repo"
+  ],
+  "author": {
+    "name": "Michael Bøcker-Larsen",
+    "email": "mblarsen@gmail.com",
+    "url": "http://github.com/mblarsen"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^1.20.1",
+    "should": "^4.0.4"
+  },
+  "dependencies": {
+    "debug": "^1.0.4",
+    "fuzzy-filter": "0.0.3",
+    "lodash": "^2.4.1",
+    "promise": "^5.0.0",
+    "request": "^2.37.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mblarsen/npm-local-cache.git"
+  }
+}
