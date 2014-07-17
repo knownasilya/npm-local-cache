@@ -40,7 +40,7 @@ First require the library like this:
 
 The cache is build lazily, so go ahead and search. Search returns a Promise.
 
-    cache.search(query, optionalKeywordArray).then(onSuccess, onError);
+    cache.search(query, optionalKeywordArray).then(onSuccess, onError).catch(errHandler);
     
 E.g.
 

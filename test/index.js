@@ -101,7 +101,9 @@ describe('npm-local-cache', function () {
         lastPackage.name.should.equal('2csv');
         done();
       }, function (err) {
-        throw new Error('Something bad happend');
+        done(err);
+      }).catch(function (err) {
+        done(err);
       });
     });
   });
@@ -117,50 +119,44 @@ describe('npm-local-cache', function () {
         assert.equal(83952, keys.length);
         done();
       }, function (err) {
-        console.error('Something bad happend');
-        throw new Error('Something bad happend');
+        done(err);
       }).catch(function (err) {
-        console.error(err);
+        done(err);
       });
     });
   });
   
-  // describe('Update from NPM, mock', function () {
-  //   it('Should produce an object with packages', function (done) {
-  //     var cache = Cache({ cachePath: testCachePath, useLocal: false });
-  //     Cache.request = RequestMock(function () {
-  //       var npmFileSmall = path.join(__dirname, 'npm-small.json');
-  //       return JSON.parse(fs.readFileSync(npmFileSmall, { encoding: 'utf8' }));
-  //     });
-  //     var p = cache.init().then(function (result) {
-  //       var pkgs = cache.getPackages();
-  //       pkgs.should.be.an.Object;
-  //       var keys = _.keys(pkgs);
-  //       keys.length.should.equal(52);
-  //       keys[0].should.equal("0");
-  //       var firstPackage = pkgs[keys[0]];
-  //       firstPackage.name.should.equal('0');
-  //       var lastPackage = pkgs[keys[keys.length - 1]];
-  //       lastPackage.name.should.equal('2csv');
-  //       done();
-  //     }, function (err) {
-    // throw new Error('Something bad happend', err);
-  //     });
-  //   });
-  // });
-  //
-  // describe('Fetching from NPM', function () {
-  //   it('Should fetch from repo and produce a cache of 80k+ packages', function (done) {
-  //     var cache = Cache({ cachePath: testCachePath, useLocal: false });
-  //     var p = cache.init().then(function (result) {
-  //       var pkgs = cache.getPackages();
-  //       pkgs.should.be.an.Object;
-  //       var keys = _.keys(pkgs);
-  //       keys.length.should.greaterThan(80000);
-  //       done();
-  //     }, function (err) {
-    // throw new Error('Something bad happend', err);
-  //     });
-  //   });
-  // });
+  describe('Applying keyword filter', function () {
+    it('Should produce an object with packages all with server keyword', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false, keywords: ['server'] });
+      Cache.request = buildRequestMock(path.join(__dirname, 'npm-small.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        pkgs.should.be.an.Object;
+        var keys = _.keys(pkgs);
+        keys.length.should.equal(7);
+        done();
+      }, function (err) {
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+    
+    it('Should produce an object with packages all with framework, server keywords', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false, keywords: ['framework', 'server'] });
+      Cache.request = buildRequestMock(path.join(__dirname, 'npm-small.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        pkgs.should.be.an.Object;
+        var keys = _.keys(pkgs);
+        keys.length.should.equal(9);
+        done();
+      }, function (err) {
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+  });
 });
