@@ -17,13 +17,13 @@ Functionality:
 ## Install
 
     npm install --save npm-local-cache
-    
+
 ## Usage
 
 First require the library like this:
 
     var cache = require('npm-local-cache)();
-    
+
 .. or pass in an options object to configure. These are the default values:
 
     var cache = require('npm-local-cache)({
@@ -41,7 +41,7 @@ First require the library like this:
 The cache is build lazily, so go ahead and search. Search returns a Promise.
 
     cache.search(query, optionalKeywordArray).then(onSuccess, onError).catch(errHandler);
-    
+
 E.g.
 
     cache.search('json', ['mongoosejs'])
@@ -51,13 +51,13 @@ E.g.
         }, function (err) {
             console.error(err);
         });
-        
+
 Packages are filtered on keywords first, then based on the query.
 
 You can refresh the cache using `refresh()` or just let the automatic refresh take place (see `ttl` below):
 
     cache.refresh();    // returns a promise
-    
+
 ## Options
 
 __keywords__: Add one or several keywords to filter packages from NPM. __Default: `[]`__
