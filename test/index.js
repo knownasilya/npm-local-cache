@@ -1,6 +1,7 @@
 'use strict';
 
 var t = require('should'),
+  assert = require('assert'),
   RequestMock = require('./requestMock'),
   fixtures = require('./fixtures'),
   path = require('path'),
@@ -17,14 +18,33 @@ var testCachePath = path.join(__dirname, 'cache.json');
 log('Default cache path: ' + defaultCachePath);
 log('Default test cache path: ' + testCachePath);
 
-// Builds a clean function of path supplied
-var buildCleanFunction = function (path) {
+// ------------------- HELPERS -------------------
+
+var buildCleanUpFunction = function (path) {
   return function () {
     if (fs.existsSync(path)) {
       fs.unlinkSync(path);
     }
-  }
+  };
 };
+
+var buildRequestMock = function (path) {
+  return RequestMock(function () {
+    log('Faking fetch from NPM, using content of file: ' + path);
+    try {
+      var content = fs.readFileSync(path, { encoding: 'utf8' });
+      log('Content loaded: ' + content.length + ' bytes');
+      var docs = JSON.parse(content);
+      log('JSON parsed');
+      return docs;
+    } catch (error) {
+      log('Error occured');
+      // log(error);
+    }
+  });
+};
+
+// ------------------- TESTS -------------------
 
 describe('npm-local-cache', function () {
   var cleanUpFunction = null;
@@ -60,18 +80,15 @@ describe('npm-local-cache', function () {
       var cachePath = defaultCachePath;
       options.localCachePath.should.equal(localCachePath);
       options.cachePath.should.equal(cachePath);
-      cleanUpFunction = buildCleanFunction(defaultCachePath);
+      cleanUpFunction = buildCleanUpFunction(defaultCachePath);
       done();
     });
   });
 
-  describe('Parsing from NPM, mock', function () {
+  describe('Parsing from NPM small, using mocked request', function () {
     it('Should produce an object with packages', function (done) {
       var cache = Cache({ cachePath: testCachePath, useLocal: false });
-      Cache.request = RequestMock(function () { 
-        var npmFileSmall = path.join(__dirname, 'npm-small.json');
-        return JSON.parse(fs.readFileSync(npmFileSmall, { encoding: 'utf8' })); 
-      });
+      Cache.request = buildRequestMock(path.join(__dirname, 'npm-small.json'));
       var p = cache.init().then(function (result) {
         var pkgs = cache.getPackages();
         pkgs.should.be.an.Object;
@@ -84,23 +101,66 @@ describe('npm-local-cache', function () {
         lastPackage.name.should.equal('2csv');
         done();
       }, function (err) {
-        log(err);
+        throw new Error('Something bad happend');
+      });
+    });
+  });
+
+  describe('Parsing from NPM big, using mocked request', function () {
+    it('Should produce an object with packages', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false, writeCache: false });
+      Cache.request = buildRequestMock(path.join(__dirname, 'npm-big.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        assert(typeof pkgs === 'object');
+        var keys = _.keys(pkgs);
+        assert.equal(83952, keys.length);
+        done();
+      }, function (err) {
+        console.error('Something bad happend');
+        throw new Error('Something bad happend');
+      }).catch(function (err) {
+        console.error(err);
       });
     });
   });
   
-  describe('Fetching from NPM', function () {
-    it('Should fetch from repo and produce a cache of 80k+ packages', function (done) {
-      var cache = Cache({ cachePath: testCachePath, useLocal: false });
-      var p = cache.init().then(function (result) {
-        var pkgs = cache.getPackages();
-        pkgs.should.be.an.Object;
-        var keys = _.keys(pkgs);
-        keys.length.should.greaterThan(80000);
-        done();
-      }, function (err) {
-        log(err);
-      });
-    });
-  });
+  // describe('Update from NPM, mock', function () {
+  //   it('Should produce an object with packages', function (done) {
+  //     var cache = Cache({ cachePath: testCachePath, useLocal: false });
+  //     Cache.request = RequestMock(function () {
+  //       var npmFileSmall = path.join(__dirname, 'npm-small.json');
+  //       return JSON.parse(fs.readFileSync(npmFileSmall, { encoding: 'utf8' }));
+  //     });
+  //     var p = cache.init().then(function (result) {
+  //       var pkgs = cache.getPackages();
+  //       pkgs.should.be.an.Object;
+  //       var keys = _.keys(pkgs);
+  //       keys.length.should.equal(52);
+  //       keys[0].should.equal("0");
+  //       var firstPackage = pkgs[keys[0]];
+  //       firstPackage.name.should.equal('0');
+  //       var lastPackage = pkgs[keys[keys.length - 1]];
+  //       lastPackage.name.should.equal('2csv');
+  //       done();
+  //     }, function (err) {
+    // throw new Error('Something bad happend', err);
+  //     });
+  //   });
+  // });
+  //
+  // describe('Fetching from NPM', function () {
+  //   it('Should fetch from repo and produce a cache of 80k+ packages', function (done) {
+  //     var cache = Cache({ cachePath: testCachePath, useLocal: false });
+  //     var p = cache.init().then(function (result) {
+  //       var pkgs = cache.getPackages();
+  //       pkgs.should.be.an.Object;
+  //       var keys = _.keys(pkgs);
+  //       keys.length.should.greaterThan(80000);
+  //       done();
+  //     }, function (err) {
+    // throw new Error('Something bad happend', err);
+  //     });
+  //   });
+  // });
 });
