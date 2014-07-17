@@ -100,80 +100,80 @@ describe('npm-local-cache', function () {
     });
   });
 
-  // describe('Parsing from NPM small, using mocked request', function () {
-  //   it('Should produce an object with packages', function (done) {
-  //     var cache = Cache({ cachePath: testCachePath, useLocal: false });
-  //     Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-small.json'));
-  //     var p = cache.init().then(function (result) {
-  //       var pkgs = cache.getPackages();
-  //       pkgs.should.be.an.Object;
-  //       var keys = _.keys(pkgs);
-  //       keys.length.should.equal(52);
-  //       keys[0].should.equal("0");
-  //       var firstPackage = pkgs[keys[0]];
-  //       firstPackage.name.should.equal('0');
-  //       var lastPackage = pkgs[keys[keys.length - 1]];
-  //       lastPackage.name.should.equal('2csv');
-  //       done();
-  //     }, function (err) {
-  //       done(err);
-  //     }).catch(function (err) {
-  //       done(err);
-  //     });
-  //   });
-  // });
-  //
-  // describe('Parsing from NPM big, using mocked request', function () {
-  //   it('Should produce an object with packages', function (done) {
-  //     var cache = Cache({ cachePath: testCachePath, useLocal: false, writeCache: false });
-  //     Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-big.json'));
-  //     var p = cache.init().then(function (result) {
-  //       var pkgs = cache.getPackages();
-  //       assert(typeof pkgs === 'object');
-  //       var keys = _.keys(pkgs);
-  //       assert.equal(83952, keys.length);
-  //       done();
-  //     }, function (err) {
-  //       done(err);
-  //     }).catch(function (err) {
-  //       done(err);
-  //     });
-  //   });
-  // });
-  //
-  // describe('Applying keyword filter', function () {
-  //   it('Should produce an object with packages all with server keyword', function (done) {
-  //     var cache = Cache({ cachePath: testCachePath, useLocal: false, keywords: ['server'] });
-  //     Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-small.json'));
-  //     var p = cache.init().then(function (result) {
-  //       var pkgs = cache.getPackages();
-  //       pkgs.should.be.an.Object;
-  //       var keys = _.keys(pkgs);
-  //       keys.length.should.equal(7);
-  //       done();
-  //     }, function (err) {
-  //       done(err);
-  //     }).catch(function (err) {
-  //       done(err);
-  //     });
-  //   });
-  //
-  //   it('Should produce an object with packages all with framework, server keywords', function (done) {
-  //     var cache = Cache({ cachePath: testCachePath, useLocal: false, keywords: ['framework', 'server'] });
-  //     Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-small.json'));
-  //     var p = cache.init().then(function (result) {
-  //       var pkgs = cache.getPackages();
-  //       pkgs.should.be.an.Object;
-  //       var keys = _.keys(pkgs);
-  //       keys.length.should.equal(9);
-  //       done();
-  //     }, function (err) {
-  //       done(err);
-  //     }).catch(function (err) {
-  //       done(err);
-  //     });
-  //   });
-  // });  
+  describe('Parsing from NPM small, using mocked request', function () {
+    it('Should produce an object with packages', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false });
+      Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-small.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        pkgs.should.be.an.Object;
+        var keys = _.keys(pkgs);
+        keys.length.should.equal(52);
+        keys[0].should.equal("0");
+        var firstPackage = pkgs[keys[0]];
+        firstPackage.name.should.equal('0');
+        var lastPackage = pkgs[keys[keys.length - 1]];
+        lastPackage.name.should.equal('2csv');
+        done();
+      }, function (err) {
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+  });
+
+  describe('Parsing from NPM big, using mocked request', function () {
+    it('Should produce an object with packages', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false, writeCache: false });
+      Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-big.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        assert(typeof pkgs === 'object');
+        var keys = _.keys(pkgs);
+        assert.equal(83952, keys.length);
+        done();
+      }, function (err) {
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+  });
+
+  describe('Applying keyword filter', function () {
+    it('Should produce an object with packages all with server keyword', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false, keywords: ['server'] });
+      Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-small.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        pkgs.should.be.an.Object;
+        var keys = _.keys(pkgs);
+        keys.length.should.equal(7);
+        done();
+      }, function (err) {
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+
+    it('Should produce an object with packages all with framework, server keywords', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false, keywords: ['framework', 'server'] });
+      Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-small.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        pkgs.should.be.an.Object;
+        var keys = _.keys(pkgs);
+        keys.length.should.equal(9);
+        done();
+      }, function (err) {
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+  });
   
   describe('Searching', function () {
     it('Should find packages based on name only', function (done) {
