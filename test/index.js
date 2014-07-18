@@ -319,7 +319,8 @@ describe('npm-local-cache', function () {
   describe('Fetch from NPM', function () {
     it('Should fetch entire registry', function (done) {
       var cache = Cache({ cachePath: testCachePath, useLocal: false });
-      var p = cache.init().then(function (pkgs) {
+      var p = cache.init().then(function () {
+        var pkgs = cache.getPackages();
         pkgs.should.be.an.Object;
         var keys = _.keys(pkgs);
         keys.length.should.be.above(80000);
