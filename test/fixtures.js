@@ -5,16 +5,27 @@ module.exports = {
       "description": "This description doesn't say much.",
       "dependencies": {
         "lodash": "^2.4.1"
-      }
+      },
+      "keywords": [
+        'tabs',
+        'bookmarks'
+      ]
     },
     "ModuleB": {
       "name": "ModuleB",
-      "description": "This description doesn't say much. Works well with ModuleA"
+      "description": "This description doesn't say much. Works well with ModuleA",
+      "keywords": [
+        'tagging',
+        'express'
+      ]
     },
     "ModuleC": {
       "name": "ModuleC",
       "description": "This description doesn't say much.",
-      "author": "Same author as of ModuleA"
+      "author": "Same author as of ModuleA",
+      "keywords": [
+        'bookmarks'
+      ]
     },
     "ModuleD": {
       "name": "ModuleD",
@@ -38,8 +49,12 @@ module.exports = {
         "debug": "^1.0.4",
         "fuzzy-filter": "0.0.3",
         "lodash": "^2.4.1"
-      }
-    },
+      },
+      "keywords": [
+        'server',
+        'bookmarks'
+      ]
+    }
   }
   // make one for each test case
 };

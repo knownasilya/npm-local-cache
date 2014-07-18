@@ -75,7 +75,7 @@ describe('npm-local-cache', function () {
   });
   
   describe('Options', function () {
-    
+
     it('Default options', function (done) {
       var cache = Cache();
       var options = cache.getOptions();
@@ -90,7 +90,7 @@ describe('npm-local-cache', function () {
       cleanUpFunction = buildCleanUpFunction(defaultCachePath);
       done();
     });
-    
+
     it('Illegal search fields should cause error', function (done) {
       var cache;
       (function(){
@@ -141,6 +141,36 @@ describe('npm-local-cache', function () {
     });
   });
 
+  describe('Partial refresh, based on npm-big.json', function () {
+    it('Should produce an object with packages by merging existing cache with newly fetched data', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false, writeCache: false });
+      Cache.request = buildRequestMockFromFile(path.join(__dirname, 'npm-big.json'));
+      var p = cache.init().then(function (result) {
+        var pkgs = cache.getPackages();
+        assert(typeof pkgs === 'object');
+        var keys = _.keys(pkgs);
+        assert.equal(83952, keys.length);
+      }, function (err) {
+        done(err);
+      });
+      
+      Cache.request = originalRequest;
+      
+      p.then(function () { return cache.refresh(); })
+        .then(function () {
+          var pkgs = cache.getPackages();
+          assert(typeof pkgs === 'object');
+          var keys = _.keys(pkgs);
+          assert.ok(83952 < keys.length);
+          done();
+        })
+        .catch(function (err) {
+          console.error(err);
+          done(err);
+        });
+    });
+  });
+
   describe('Applying keyword filter', function () {
     it('Should produce an object with packages all with server keyword', function (done) {
       var cache = Cache({ cachePath: testCachePath, useLocal: false, keywords: ['server'] });
@@ -174,7 +204,7 @@ describe('npm-local-cache', function () {
       });
     });
   });
-  
+
   describe('Searching', function () {
     it('Should find packages based on name only', function (done) {
       var cache = Cache({ searchFields: ['name'], cachePath: testCachePath, useLocal: false });
@@ -262,6 +292,40 @@ describe('npm-local-cache', function () {
         keys[1].should.equal("ModuleE");
         done();
       }, function (err) {
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+    it('Should find packages based on keywords and query', function (done) {
+      var cache = Cache({ searchFields: ['name', 'description', 'author' ], cachePath: testCachePath, useLocal: false });
+      Cache.request = buildRequestMockFromObject(fixtures.SearchFieldTest)
+      var p = cache.search('ModuleA', 'bookmarks') // Query matchs 3, but keywords only matches 2 of those
+        .then(function (pkgs) {
+        pkgs.should.be.an.Object;
+          var keys = _.keys(pkgs);
+          keys.length.should.equal(2);
+          keys[0].should.equal("ModuleA");
+          keys[1].should.equal("ModuleC");
+          done();
+        }, function (err) {
+          done(err);
+        }).catch(function (err) {
+          done(err);
+        });
+    });
+  });
+
+  describe('Fetch from NPM', function () {
+    it('Should fetch entire registry', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: false });
+      var p = cache.init().then(function (pkgs) {
+        pkgs.should.be.an.Object;
+        var keys = _.keys(pkgs);
+        keys.length.should.be.above(80000);
+        done();
+      }, function (err) {
+        console.log(err);
         done(err);
       }).catch(function (err) {
         done(err);
