@@ -333,4 +333,22 @@ describe('npm-local-cache', function () {
       });
     });
   });
+
+  describe('Fetch from NPM, based on local', function () {
+    it('Should fetch entire registry', function (done) {
+      var cache = Cache({ cachePath: testCachePath, useLocal: true, localCachePath: path.join(__dirname, 'npm-big.json') });
+      var p = cache.init().then(function () {
+        var pkgs = cache.getPackages();
+        assert(pkgs instanceof Object);
+        var keys = _.keys(pkgs);
+        assert(keys.length > 80000);
+        done();
+      }, function (err) {
+        console.log(err);
+        done(err);
+      }).catch(function (err) {
+        done(err);
+      });
+    });
+  });
 });

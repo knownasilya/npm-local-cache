@@ -4,7 +4,7 @@
   "description": "Creates a local searchable NPM cache. Good for building your own module repo based on NPM.",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha -s 2000 -t 90000 -R spec test/*.js"
+    "test": "node_modules/mocha/bin/mocha -s 2000 -t 900000 -R spec test/*.js"
   },
   "keywords": [
     "npm",
