@@ -60,7 +60,7 @@ describe('npm-local-cache', function () {
     Cache.request = originalRequest;
     done();
   });
-  
+
   // Invoke clean function or remove default cache.json
   afterEach(function (done) {
     if (cleanUpFunction !== null) {
@@ -73,7 +73,7 @@ describe('npm-local-cache', function () {
     log('Cleaning done');
     done();
   });
-  
+
   describe('Options', function () {
 
     it('Default options', function (done) {
@@ -153,9 +153,9 @@ describe('npm-local-cache', function () {
       }, function (err) {
         done(err);
       });
-      
+
       Cache.request = originalRequest;
-      
+
       p.then(function () { return cache.refresh(); })
         .then(function () {
           var pkgs = cache.getPackages();
@@ -321,9 +321,9 @@ describe('npm-local-cache', function () {
       var cache = Cache({ cachePath: testCachePath, useLocal: false });
       var p = cache.init().then(function () {
         var pkgs = cache.getPackages();
-        pkgs.should.be.an.Object;
+        assert(pkgs instanceof Object);
         var keys = _.keys(pkgs);
-        keys.length.should.be.above(80000);
+        assert(keys.length > 80000);
         done();
       }, function (err) {
         console.log(err);
