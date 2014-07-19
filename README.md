@@ -10,7 +10,7 @@ Creates a local searchable NPM cache. Good for building your own module repo bas
 Functionality:
 
 * Filter on custom keywords (useful for when NPM is used as module repo, like in the case of [mongoosejs](http://mongoosejs.com) and [breach.cc](http://breach.cc)).
-* Customizble search fields.
+* Customizable search fields.
 * Cache time to live (update cache periodically).
 * Build from local NPM cache.
 
@@ -20,13 +20,13 @@ Functionality:
 
 ## Usage
 
-First require the library like this:
+Either require the library like this:
 
     var cache = require('npm-local-cache)();
 
 .. or pass in an options object to configure. These are the default values:
 
-    var cache = require('npm-local-cache)({
+    var cache = require('npm-local-cache')({
         keywords: [],
         searchFields: ['name', 'description', 'keywords'],
         useLocal: true,
