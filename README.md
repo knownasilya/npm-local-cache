@@ -22,7 +22,7 @@ Functionality:
 
 Either require the library like this:
 
-    var cache = require('npm-local-cache)();
+    var cache = require('npm-local-cache')();
 
 .. or pass in an options object to configure. These are the default values:
 
